@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="first_category"
+        android:title="Opciones" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="nuevos"
+            android:title="Ver nuevos" />
+
+        <Preference
+            android:key="borrartodos"
+            android:summary="Se eliminara la lista entera de favoritos"
+            android:title="Eliminar Favoritos" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="second_category"
+        android:title="Contacto" >
+        <Preference
+            android:key="correo"
+            android:summary="bastewhite@gmail.com"
+            android:title="Correo" />
+        <Preference
+            android:key="twitter"
+            android:summary="\@Bastewhite"
+            android:title="Twitter" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="second_category"
+        android:title="Otros" >
+        <Preference
+            android:key="otros"
+            android:title="Buscar otros soundboards" />
+        <Preference
+            android:enabled="false"
+            android:key="version"
+            android:title="Versión de la aplicación" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

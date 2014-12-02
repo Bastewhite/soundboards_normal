@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">IntroDibus</string>
+    <string name="ad_unit_id">ca-app-pub-1537570875628146/6658846519</string>
+    <string name="info_text">%1$s %2$s %3$s</string>
+</resources>

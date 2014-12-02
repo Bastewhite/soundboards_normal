@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bender Soundboard (Español)</string>
+    <string name="ad_unit_id">ca-app-pub-1537570875628146/3705380119</string>
+    <string name="info_text">%1$s ofrece %2$s sonidos distintos de los mejores momentos de %3$s. Además de escucharlos también se ofrecen las siguientes posibilidades:\n\nAsignar como: Se puede asignar como tono, notificación o alarma el sonido que queráis mediante la pulsación larga en este.\n\nFavoritos: Crea tu propia lista con tus sonidos favoritos fácilmente añadiendo y quitando mediante la estrella.\n\nCopiar en SD: Pasa tus sonidos preferidos a la tarjeta SD, se copian en la carpeta \"%4$s\"\n\nCompartir: Puedes enviar tus sonidos preferidos por bluetooth, correo o WhatsApp.</string>
+</resources>

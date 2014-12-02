@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingLeft="10sp"
+    android:paddingRight="10sp"
+    android:paddingTop="2sp"
+    android:background="@drawable/shape_todos_row">
+
+    <ImageView
+        android:id="@+id/icon_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_new"/>
+
+    <TextView
+        android:id="@+id/TodtvMail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:maxLines="2"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        tools:text="Mail asdf sad fsad fsad as  asdf sad asd sad asdf asd fsad asd fasd fzxcv zxzxcv xcv "/>
+
+    <Button
+        android:id="@+id/video"
+        android:layout_width="25dip"
+        android:layout_height="25dip"
+        android:layout_marginRight="5dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <CheckBox
+        android:id="@+id/TodbtnRemove"
+        style="?android:attr/starStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+</LinearLayout>

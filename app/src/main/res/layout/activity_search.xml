@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/ListView"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:background="#991D2020"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="#661D2020"
+        android:dividerHeight="1px"
+        android:fastScrollEnabled="true"
+        android:saveEnabled="true"
+        android:textFilterEnabled="false" />
+
+    <TextView
+        android:id="@+id/tvListaVacia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/lista_vacia_search"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:visibility="gone" />
+
+</RelativeLayout>
