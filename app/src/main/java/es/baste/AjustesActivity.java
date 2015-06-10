@@ -32,12 +32,13 @@ public class AjustesActivity extends PreferenceActivity {
         addPreferencesFromResource(R.xml.preferences);
         prefs = MainActivity.prefs;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB && getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
             getActionBar().setSubtitle(R.string.action_settings);
         }
-        else
+        else {
             setTitle(getString(R.string.app_name) + ": " + getString(R.string.action_settings));
+        }
 
         Preference version = findPreference("version");
         if (version != null) {

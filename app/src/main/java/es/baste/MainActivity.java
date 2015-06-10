@@ -9,45 +9,69 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBar.TabListener;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import es.baste.adapters.MyPagerAdapter;
 import es.baste.application.MyApplication;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.ChangeBackgroundEvent;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
 
     public static SharedPreferences prefs;
     private ProgressDialog progressDialog;
     private MyPagerAdapter mAppSectionsPagerAdapter;
-    private ViewPager mViewPager;
+//    private ViewPager mViewPager;
 
-    public void onCreate(Bundle savedInstanceState) {
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.tabs)
+    TabLayout mTabs;
+    @InjectView(R.id.viewpager)
+    ViewPager mViewpager;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         progressDialogLoad(this);
         Utiles.salir = false;
 
-        newVersionsLoad();
+        newDesignLoad();
     }
 
-    private void newVersionsLoad() {
+    private void newDesignLoad() {
+        setContentView(R.layout.include_list_viewpager);
+        ButterKnife.inject(this);
+
+        setSupportActionBar(mToolbar);
+
+        mAppSectionsPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mViewpager.setAdapter(mAppSectionsPagerAdapter);
+        mTabs.setupWithViewPager(mViewpager);
+
+        mViewpager.setBackgroundResource(BuildConfig.DEFAULT_FONDO);
+
+        String fav = prefs.getString("fav", "");
+        if (fav.equals(""))
+            mViewpager.setCurrentItem(0);
+        else
+            mViewpager.setCurrentItem(1);
+    }
+
+/*    private void newVersionsLoad() {
         setContentView(R.layout.activity_main);
 
         // Buscar AdView como recurso y cargar una solicitud.
@@ -114,7 +138,7 @@ public class MainActivity extends ActionBarActivity {
             mViewPager.setCurrentItem(0);
         else
             mViewPager.setCurrentItem(1);
-    }
+    }*/
 
     private void progressDialogLoad(final Context mContext) {
         Runnable showWaitDialog = new Runnable() {
@@ -224,7 +248,7 @@ public class MainActivity extends ActionBarActivity {
     @Subscribe
     public void changeBackground(ChangeBackgroundEvent event) {
         if (event.getSonido().getImage() != 0) {
-            mViewPager.setBackgroundResource(event.getSonido().getImage());
+            mViewpager.setBackgroundResource(event.getSonido().getImage());
         }
     }
 

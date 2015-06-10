@@ -5,8 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import es.baste.BuildConfig;
-import es.baste.InfoFragment;
 import es.baste.fragments.FavoritosFragment;
+import es.baste.fragments.InfoFragment;
 import es.baste.fragments.SonidosFragment;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {

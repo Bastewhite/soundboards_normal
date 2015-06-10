@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Vibrator;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,7 +30,7 @@ import es.baste.otto.events.UpdateEvent;
 /**
  * Created by Fran on 12/06/2014.
  */
-public class SonidoItemController {
+public class SoundItemController extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
     @InjectView(R.id.icon_new)
     ImageView nuevo;
@@ -41,7 +43,20 @@ public class SonidoItemController {
 
     private Sonido mSonido;
 
-    public static SonidoItemController get(View view) {
+    public interface Listener {
+        void onSoundClick(Sonido sonido);
+        void onSoundLongClick(Sonido sonido);
+    }
+
+    public SoundItemController(View itemView) {
+        super(itemView);
+
+        ButterKnife.inject(this, itemView);
+        itemView.setOnClickListener(this);
+        itemView.setOnLongClickListener(this);
+    }
+
+/*    public static SonidoItemController get(View view) {
         SonidoItemController controller = (SonidoItemController) view.getTag();
         if (controller == null) {
             controller = new SonidoItemController();
@@ -50,9 +65,9 @@ public class SonidoItemController {
         }
 
         return controller;
-    }
+    }*/
 
-    public SonidoItemController configure(Sonido sonido) {
+    public SoundItemController configure(Sonido sonido) {
         this.mSonido = sonido;
 
         //Texto
@@ -151,4 +166,16 @@ public class SonidoItemController {
         Toast.makeText(context, R.string.eliminado, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onClick(View v) {
+        Utiles.reproducir(v.getContext(), mSonido);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        Vibrator vv = (Vibrator) v.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        vv.vibrate(25);
+        Utiles.subMenu(mSonido, v.getContext());
+        return false;
+    }
 }

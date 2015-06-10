@@ -1,36 +1,33 @@
 package es.baste.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
 
 import com.squareup.otto.Subscribe;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import es.baste.DividerItemDecoration;
 import es.baste.R;
-import es.baste.Utiles;
 import es.baste.UtilesSonidos;
-import es.baste.adapters.MyListAdapter;
+import es.baste.adapters.MyRecyclerViewAdapter;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.UpdateEvent;
 
-public class SonidosFragment extends Fragment implements AbsListView.OnItemClickListener,
-        AbsListView.OnItemLongClickListener {
+public class SonidosFragment extends Fragment {
 
-    /**
-     * The Adapter which will be used to populate the ListView/GridView with
-     * Views.
-     */
-    private MyListAdapter mAdapter;
+    @InjectView(R.id.recyclerview)
+    RecyclerView mRecyclerview;
+
+    private MyRecyclerViewAdapter mAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,46 +39,28 @@ public class SonidosFragment extends Fragment implements AbsListView.OnItemClick
     }
 
     private void updateList() {
-        mAdapter = new MyListAdapter(getActivity(), UtilesSonidos.getListaTodos());
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), UtilesSonidos.getListaTodos());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.main, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        ButterKnife.inject(this, view);
+        setupRecyclerView();
+        return view;
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        // Set the adapter
-        // The fragment's ListView/GridView.
-        AbsListView mListView = (AbsListView) view.findViewById(android.R.id.list);
-        ((AdapterView<ListAdapter>) mListView).setAdapter(mAdapter);
-
-        // Set OnItemClickListener so we can be notified on item clicks
-        mListView.setOnItemClickListener(this);
-        mListView.setOnItemLongClickListener(this);
+    private void setupRecyclerView() {
+        mRecyclerview.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(mRecyclerview.getContext()));
+//        mRecyclerview.setLayoutManager(new GridLayoutManager(mRecyclerview.getContext(), 2));
+        mRecyclerview.setAdapter(mAdapter);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // Reproducir
-        Utiles.reproducir(view.getContext(), mAdapter.getItem(position));
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Vibrator vv = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-        vv.vibrate(25);
-        Utiles.subMenu(mAdapter.getItem(i), getActivity());
-        return false;
-    }
-
-   @Subscribe
+    @Subscribe
     public void update(UpdateEvent event) {
-       mAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -106,5 +85,4 @@ public class SonidosFragment extends Fragment implements AbsListView.OnItemClick
             update(null);
         }
     }
-
 }

@@ -36,8 +36,8 @@ public class Utiles {
     private static Sonido anterior;
     private static boolean sonido = false;
 
-    static String nombre = BuildConfig.FOLDER_NAME;
-    static String PATH = Environment.getExternalStorageDirectory()+File.separator+nombre+File.separator;
+    public static String nombre = BuildConfig.FOLDER_NAME;
+    private static String PATH = Environment.getExternalStorageDirectory()+File.separator+nombre+File.separator;
 
     public static MediaPlayer getMediaPlayer() {
         return mp;

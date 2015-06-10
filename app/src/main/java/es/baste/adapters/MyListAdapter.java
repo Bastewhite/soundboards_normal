@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import java.util.List;
 
 import es.baste.Sonido;
-import es.baste.views.SonidoItemController;
+import es.baste.views.SoundItemController;
 
 public class MyListAdapter extends BaseAdapter {
 	private Context context;
@@ -36,10 +36,10 @@ public class MyListAdapter extends BaseAdapter {
 			ViewGroup viewGroup) {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(
-                    SonidoItemController.getLayoutResource(), viewGroup, false);
+                    SoundItemController.getLayoutResource(), viewGroup, false);
         }
 
-        SonidoItemController.get(convertView).configure(getItem(position));
+//        SonidoItemController.get(convertView).configure(getItem(position));
 
         return convertView;
 	}

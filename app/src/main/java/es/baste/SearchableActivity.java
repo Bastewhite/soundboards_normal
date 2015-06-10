@@ -1,25 +1,30 @@
 package es.baste;
 
-import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import es.baste.adapters.MyListAdapter;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import es.baste.adapters.MyRecyclerViewAdapter;
 import es.baste.application.MyApplication;
 
-public class SearchableActivity extends ActionBarActivity {
+public class SearchableActivity extends AppCompatActivity {
+
+    @InjectView(R.id.recyclerview)
+    RecyclerView mRecyclerview;
+    @InjectView(R.id.tvListaVacia)
+    TextView mTvListaVacia;
 
     @Override
     protected void onStart() {
@@ -28,11 +33,12 @@ public class SearchableActivity extends ActionBarActivity {
         ((MyApplication) getApplication()).setTrackerScreenName(this.getClass().getName());
     }
 
-    @SuppressLint("NewApi")
-    public void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_search);
+        ButterKnife.inject(this);
 
         String query = getIntent().getStringExtra(SearchManager.QUERY);
 
@@ -51,19 +57,12 @@ public class SearchableActivity extends ActionBarActivity {
             }
         }
 
-        ListView lv = (ListView) findViewById(R.id.ListView);
-        lv.setAdapter(new MyListAdapter(this, l));
-        lv.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
-                Utiles.reproducir(arg1.getContext(), l.get(arg2));
-            }
-        });
+        mRecyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerview.setLayoutManager(new LinearLayoutManager(mRecyclerview.getContext()));
+        mRecyclerview.setAdapter(new MyRecyclerViewAdapter(this, l));
 
         if (l.isEmpty()) {
-            TextView tvListaVacia = (TextView) findViewById(R.id.tvListaVacia);
-            tvListaVacia.setVisibility(View.VISIBLE);
+            mTvListaVacia.setVisibility(View.VISIBLE);
         }
     }
 
