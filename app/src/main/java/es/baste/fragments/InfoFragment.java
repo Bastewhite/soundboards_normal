@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import es.baste.R;
-import es.baste.Utiles;
 import es.baste.UtilesSonidos;
+import es.baste.Utils;
 
 public class InfoFragment extends Fragment {
 
@@ -24,6 +24,6 @@ public class InfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView textview = (TextView) view.findViewById(R.id.helpWelcome);
-        textview.setText(getString(R.string.info_text, getString(R.string.app_name), UtilesSonidos.getListaTodos().size(), Utiles.nombre, Utiles.nombre));
+        textview.setText(getString(R.string.info_text, getString(R.string.app_name), UtilesSonidos.getListaTodos().size(), Utils.nombre, Utils.nombre));
     }
 }

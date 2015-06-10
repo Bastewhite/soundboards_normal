@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,10 +23,10 @@ import es.baste.adapters.MyRecyclerViewAdapter;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.UpdateEvent;
 
-public class SonidosFragment extends Fragment {
+public class SoundsListFragment extends Fragment {
 
     @InjectView(R.id.recyclerview)
-    RecyclerView mRecyclerview;
+    RecyclerView mRecyclerView;
 
     private MyRecyclerViewAdapter mAdapter;
 
@@ -52,10 +53,16 @@ public class SonidosFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        mRecyclerview.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
-        mRecyclerview.setLayoutManager(new LinearLayoutManager(mRecyclerview.getContext()));
-//        mRecyclerview.setLayoutManager(new GridLayoutManager(mRecyclerview.getContext(), 2));
-        mRecyclerview.setAdapter(mAdapter);
+        if (getActivity().getResources().getBoolean(R.bool.isTablet)) {
+            mRecyclerView.setLayoutManager(new GridLayoutManager(mRecyclerView.getContext(), 2));
+//            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+//            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.HORIZONTAL_LIST));
+        }
+        else {
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
+        }
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Subscribe

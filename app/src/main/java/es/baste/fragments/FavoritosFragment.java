@@ -20,8 +20,8 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import es.baste.DividerItemDecoration;
 import es.baste.R;
-import es.baste.Sonido;
-import es.baste.Utiles;
+import es.baste.Sound;
+import es.baste.Utils;
 import es.baste.adapters.MyRecyclerViewAdapter;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.UpdateEvent;
@@ -34,7 +34,7 @@ public class FavoritosFragment extends Fragment {
     RecyclerView mRecyclerview;
 
     private MyRecyclerViewAdapter adapterfav;
-	private List<Sonido> aver;
+	private List<Sound> aver;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +49,7 @@ public class FavoritosFragment extends Fragment {
 		getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         ButterKnife.inject(this, view);
 
-		aver = Utiles.getListaFavoritos();
+		aver = Utils.getListaFavoritos();
         if (aver.isEmpty()) {
             mTvEmpty.setVisibility(View.VISIBLE);
         }

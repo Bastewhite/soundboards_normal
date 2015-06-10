@@ -19,7 +19,7 @@ import es.baste.application.MyApplication;
 
 
 @SuppressWarnings("deprecation")
-public class AjustesActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
     /**
      * Called when the activity is first created.
      */
@@ -109,10 +109,10 @@ public class AjustesActivity extends PreferenceActivity {
             nuevos.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     if (prefs.getBoolean("nuevos", true)) {
-                        Toast.makeText(AjustesActivity.this, "Sí",
+                        Toast.makeText(SettingsActivity.this, "Sí",
                                 Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(AjustesActivity.this, "No",
+                        Toast.makeText(SettingsActivity.this, "No",
                                 Toast.LENGTH_SHORT).show();
                     }
                     isUpdateNeeded = true;
@@ -128,12 +128,12 @@ public class AjustesActivity extends PreferenceActivity {
         alt_bld.setCancelable(false);
         alt_bld.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                Utiles.getListaFavoritos().clear();
+                Utils.getListaFavoritos().clear();
                 isUpdateNeeded = true;
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.remove("fav");
                 editor.commit();
-                Toast.makeText(AjustesActivity.this, "Lista vacía",
+                Toast.makeText(SettingsActivity.this, "Lista vacía",
                         Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }

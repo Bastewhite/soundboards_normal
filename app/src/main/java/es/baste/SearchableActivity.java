@@ -46,12 +46,12 @@ public class SearchableActivity extends AppCompatActivity {
         getSupportActionBar().setSubtitle("Resultados de la búsqueda: " + query);
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-        final List<Sonido> l = new ArrayList<Sonido>();
+        final List<Sound> l = new ArrayList<Sound>();
 
         // Get the intent, verify the action and get the query
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {
             // doMySearch(query);
-            for (Sonido s : UtilesSonidos.getListaTodos()) {
+            for (Sound s : UtilesSonidos.getListaTodos()) {
                 if (limpiarString(s.getNombre()).contains(limpiarString(query)))
                     l.add(s);
             }

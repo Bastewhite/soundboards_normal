@@ -1,6 +1,6 @@
 package es.baste;
 
-public class Sonido {
+public class Sound {
 
 	private String nombre;
 	private int archivo;
@@ -8,13 +8,13 @@ public class Sonido {
     private String urlVideo;
     private int image;
 
-    public Sonido(String nombre, int archivo) {
+    public Sound(String nombre, int archivo) {
         super();
         this.nombre = nombre;
         this.archivo = archivo;
     }
 	
-	public Sonido(String nombre, int archivo, boolean nuevo) {
+	public Sound(String nombre, int archivo, boolean nuevo) {
 		super();
 		this.nombre = nombre;
 		this.archivo = archivo;
@@ -33,7 +33,7 @@ public class Sonido {
 		return nuevo;
 	}
 
-    public Sonido setNuevo() {
+    public Sound setNuevo() {
         this.nuevo = true;
         return this;
     }
@@ -42,7 +42,7 @@ public class Sonido {
         return urlVideo;
     }
 
-    public Sonido setUrlVideo(String urlVideo) {
+    public Sound setUrlVideo(String urlVideo) {
         this.urlVideo = urlVideo;
         return this;
     }
@@ -51,7 +51,7 @@ public class Sonido {
         return image;
     }
 
-    public Sonido setImage(int image) {
+    public Sound setImage(int image) {
         this.image = image;
         return this;
     }
@@ -77,7 +77,7 @@ public class Sonido {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Sonido other = (Sonido) obj;
+		Sound other = (Sound) obj;
 		if (nombre == null) {
 			if (other.nombre != null)
 				return false;

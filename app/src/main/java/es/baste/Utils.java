@@ -28,33 +28,33 @@ import java.util.List;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.ChangeBackgroundEvent;
 
-public class Utiles {
+public class Utils {
 
-    private static List<Sonido> favoritos = new ArrayList<Sonido>();
+    private static List<Sound> favoritos = new ArrayList<Sound>();
     private static MediaPlayer mp = new MediaPlayer();
 
-    private static Sonido anterior;
+    private static Sound anterior;
     private static boolean sonido = false;
 
     public static String nombre = BuildConfig.FOLDER_NAME;
-    private static String PATH = Environment.getExternalStorageDirectory()+File.separator+nombre+File.separator;
+    private static String PATH = Environment.getExternalStorageDirectory() + File.separator + nombre + File.separator;
 
     public static MediaPlayer getMediaPlayer() {
         return mp;
     }
 
-    public static List<Sonido> getListaFavoritos() {
+    public static List<Sound> getListaFavoritos() {
         return favoritos;
     }
 
-    public static void reproducir(Context cont, Sonido s) {
+    public static void reproducir(Context cont, Sound s) {
         if (s.equals(anterior) && sonido && mp.isPlaying()) {
             mp.stop();
             sonido = false;
         } else {
             anterior = s;
             sonido = true;
-            if(mp!=null)
+            if (mp != null)
                 mp.reset();
             int repro = 0;
             if (UtilesSonidos.getListaTodos().contains(s))
@@ -111,6 +111,7 @@ public class Utiles {
 
         new File(PATH, filename);
     }
+
     static boolean salir = false;
 
     public static boolean onBackPressed(Context mContext) {
@@ -126,7 +127,7 @@ public class Utiles {
                 editor.putInt("VersionCode", getVersion(mContext));
                 editor.commit();
             }
-            if(mp.isPlaying())
+            if (mp.isPlaying())
                 mp.stop();
             return true;
         }
@@ -145,11 +146,10 @@ public class Utiles {
     }
 
     /**
-     *
      * @param aux
      * @param mContext
      */
-    public static void subMenu(final Sonido aux, final Context mContext) {
+    public static void subMenu(final Sound aux, final Context mContext) {
         final CharSequence[] items = {"Asignar como...", "Compartir...",
                 "Copiar a SD"};
 
@@ -173,7 +173,7 @@ public class Utiles {
         alert.show();
     }
 
-    public static void asignarComo(final Sonido aux, final Context mContext) {
+    public static void asignarComo(final Sound aux, final Context mContext) {
         final CharSequence[] items = {"Tono", "Notificación", "Alarma"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
@@ -284,7 +284,7 @@ public class Utiles {
         return output;
     }
 
-    public static boolean save(Sonido s, Context mContext) {
+    public static boolean save(Sound s, Context mContext) {
         byte[] buffer;
         InputStream fIn = mContext.getResources().openRawResource(
                 s.getArchivo());
@@ -326,7 +326,7 @@ public class Utiles {
         return true;
     }
 
-    public static boolean compartir(Sonido s, Context mContext) {
+    public static boolean compartir(Sound s, Context mContext) {
         save(s, mContext);
         Intent it = new Intent(Intent.ACTION_SEND);
         it.putExtra(

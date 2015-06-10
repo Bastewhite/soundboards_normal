@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import es.baste.BuildConfig;
 import es.baste.fragments.FavoritosFragment;
 import es.baste.fragments.InfoFragment;
-import es.baste.fragments.SonidosFragment;
+import es.baste.fragments.SoundsListFragment;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
 	private final String[] TITLES = { "TODOS", "FAVORITOS", "INFO" };
-	private SonidosFragment todosFragment;
+	private SoundsListFragment todosFragment;
 	private FavoritosFragment favoritosFragment;
 	private InfoFragment infoFragment;
 	
@@ -32,7 +32,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 	
 	private Fragment getTodosFragment() {
 		if (todosFragment == null) {
-			todosFragment = new SonidosFragment();
+			todosFragment = new SoundsListFragment();
 		}
 		return todosFragment;
 	}

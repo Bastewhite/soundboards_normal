@@ -22,8 +22,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import es.baste.MainActivity;
 import es.baste.R;
-import es.baste.Sonido;
-import es.baste.Utiles;
+import es.baste.Sound;
+import es.baste.Utils;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.UpdateEvent;
 
@@ -41,11 +41,11 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
     @InjectView(R.id.video)
     Button mVideo;
 
-    private Sonido mSonido;
+    private Sound mSound;
 
     public interface Listener {
-        void onSoundClick(Sonido sonido);
-        void onSoundLongClick(Sonido sonido);
+        void onSoundClick(Sound sound);
+        void onSoundLongClick(Sound sound);
     }
 
     public SoundItemController(View itemView) {
@@ -67,29 +67,29 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
         return controller;
     }*/
 
-    public SoundItemController configure(Sonido sonido) {
-        this.mSonido = sonido;
+    public SoundItemController configure(Sound sound) {
+        this.mSound = sound;
 
         //Texto
-        mTodtvMail.setText(sonido.getNombre());
+        mTodtvMail.setText(sound.getNombre());
 
         //Checkbox
-        btnRemove.setChecked(Utiles.getListaFavoritos().contains(sonido));
+        btnRemove.setChecked(Utils.getListaFavoritos().contains(sound));
 
         //Icono nuevo
         boolean vnuevos = MainActivity.prefs.getBoolean("nuevos", true);
-        if (sonido.isNuevo() && vnuevos)
+        if (sound.isNuevo() && vnuevos)
             nuevo.setVisibility(View.VISIBLE);
         else
             nuevo.setVisibility(View.GONE);
 
         //Video
-        mVideo.setVisibility(sonido.getVideoUrl()!= null ? View.VISIBLE : View.GONE);
-        if(sonido.getVideoUrl() == null) {
+        mVideo.setVisibility(sound.getVideoUrl()!= null ? View.VISIBLE : View.GONE);
+        if(sound.getVideoUrl() == null) {
             mVideo.setVisibility(View.GONE);
         }
         else {
-            mVideo.setBackgroundResource(sonido.getVideoUrl().contains("youtube") ? R.drawable.youtube : R.drawable.play);
+            mVideo.setBackgroundResource(sound.getVideoUrl().contains("youtube") ? R.drawable.youtube : R.drawable.play);
             mVideo.setVisibility(View.VISIBLE);
         }
 
@@ -97,29 +97,29 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
     }
 
     public static int getLayoutResource() {
-        return R.layout.todos_row;
+        return R.layout.view_sound_item;
     }
 
     @OnClick(R.id.TodbtnRemove)
     public void onFavoritesClick(View view) {
         if (btnRemove.isChecked()) {
-            anadirFavorito(view.getContext(), mSonido);
+            anadirFavorito(view.getContext(), mSound);
         } else {
-            eliminarFavorito(view.getContext(), mSonido);
+            eliminarFavorito(view.getContext(), mSound);
         }
         BusProvider.getInstance().post(new UpdateEvent());
     }
 
     @OnClick(R.id.video)
     public void onVideoClick(View view) {
-        if (Utiles.getMediaPlayer().isPlaying())
-            Utiles.getMediaPlayer().stop();
+        if (Utils.getMediaPlayer().isPlaying())
+            Utils.getMediaPlayer().stop();
 
         Context context = view.getContext();
-        if (mSonido.getVideoUrl().contains("dropbox")) {
+        if (mSound.getVideoUrl().contains("dropbox")) {
             Intent intent = new Intent();
             intent.setAction(android.content.Intent.ACTION_VIEW);
-            intent.setDataAndType(Uri.parse(mSonido.getVideoUrl()), "video/*");
+            intent.setDataAndType(Uri.parse(mSound.getVideoUrl()), "video/*");
             List<ResolveInfo> intents = context.getPackageManager()
                     .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
             if (intents != null && intents.size() > 0) {
@@ -136,13 +136,13 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
 
     private void openVideoUrl(Context context) {
         Intent i = new Intent("android.intent.action.VIEW", Uri
-                .parse(mSonido.getVideoUrl()));
+                .parse(mSound.getVideoUrl()));
         context.startActivity(i);
     }
 
-    private void anadirFavorito(Context context, Sonido aux) {
+    private void anadirFavorito(Context context, Sound aux) {
         SharedPreferences prefs = MainActivity.prefs;
-        Utiles.getListaFavoritos().add(aux);
+        Utils.getListaFavoritos().add(aux);
         String fav = prefs.getString("fav", "");
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("fav", fav + "-" + aux.getNombre());
@@ -152,11 +152,11 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
     }
 
 
-    private void eliminarFavorito(Context context, Sonido aux) {
+    private void eliminarFavorito(Context context, Sound aux) {
         SharedPreferences prefs = MainActivity.prefs;
-        Utiles.getListaFavoritos().remove(aux);
+        Utils.getListaFavoritos().remove(aux);
         String s = "";
-        for (Sonido sss : Utiles.getListaFavoritos()) {
+        for (Sound sss : Utils.getListaFavoritos()) {
             s = s + "-" + sss.getNombre();
         }
         SharedPreferences.Editor editor = prefs.edit();
@@ -168,14 +168,14 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
 
     @Override
     public void onClick(View v) {
-        Utiles.reproducir(v.getContext(), mSonido);
+        Utils.reproducir(v.getContext(), mSound);
     }
 
     @Override
     public boolean onLongClick(View v) {
         Vibrator vv = (Vibrator) v.getContext().getSystemService(Context.VIBRATOR_SERVICE);
         vv.vibrate(25);
-        Utiles.subMenu(mSonido, v.getContext());
+        Utils.subMenu(mSound, v.getContext());
         return false;
     }
 }

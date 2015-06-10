@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import es.baste.R;
-import es.baste.Sonido;
+import es.baste.Sound;
 import es.baste.views.SoundItemController;
 
 /**
@@ -23,13 +23,13 @@ import es.baste.views.SoundItemController;
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<SoundItemController> {
 
     private int mBackground;
-    private List<Sonido> mSonidos;
+    private List<Sound> mSounds;
 
-    public MyRecyclerViewAdapter(Context context, List<Sonido> sonidos) {
+    public MyRecyclerViewAdapter(Context context, List<Sound> sounds) {
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
         mBackground = typedValue.resourceId;
-        this.mSonidos = sonidos;
+        this.mSounds = sounds;
     }
 
     @Override
@@ -42,11 +42,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<SoundItemControl
 
     @Override
     public void onBindViewHolder(SoundItemController sonidoItemController, int i) {
-        sonidoItemController.configure(mSonidos.get(i));
+        sonidoItemController.configure(mSounds.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return mSonidos.size();
+        return mSounds.size();
     }
 }

@@ -1,19 +1,19 @@
 package es.baste.otto.events;
 
-import es.baste.Sonido;
+import es.baste.Sound;
 
 /**
  * Created by Fran on 29/09/2014.
  */
 public class ChangeBackgroundEvent {
 
-    private Sonido sonido;
+    private Sound mSound;
 
-    public ChangeBackgroundEvent(Sonido sonido) {
-        this.sonido = sonido;
+    public ChangeBackgroundEvent(Sound sound) {
+        this.mSound = sound;
     }
 
-    public Sonido getSonido() {
-        return sonido;
+    public Sound getSound() {
+        return mSound;
     }
 }
