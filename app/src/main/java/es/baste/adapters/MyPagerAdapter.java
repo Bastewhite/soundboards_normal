@@ -5,70 +5,63 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import es.baste.BuildConfig;
-import es.baste.fragments.FavoritosFragment;
 import es.baste.fragments.InfoFragment;
 import es.baste.fragments.SoundsListFragment;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
-	private final String[] TITLES = { "TODOS", "FAVORITOS", "INFO" };
-	private SoundsListFragment todosFragment;
-	private FavoritosFragment favoritosFragment;
-	private InfoFragment infoFragment;
-	
-	public MyPagerAdapter(FragmentManager fm) {
-		super(fm);
-	}
+    private final String[] TITLES = {"TODOS", "FAVORITOS", "INFO"};
 
-	@Override
-	public CharSequence getPageTitle(int position) {
-		return TITLES[position];
-	}
+    private SoundsListFragment mAllSoundsFragment;
+    private SoundsListFragment mFavSoundsFragment;
+    private InfoFragment mInfoFragment;
 
-	@Override
-	public int getCount() {
-		return BuildConfig.MY_PAGER_ADAPTER_COUNT;
-	}
-	
-	private Fragment getTodosFragment() {
-		if (todosFragment == null) {
-			todosFragment = new SoundsListFragment();
-		}
-		return todosFragment;
-	}
-	
-	private Fragment getFavoritosFragment() {
-		if (favoritosFragment == null) {
-			favoritosFragment = new FavoritosFragment();
-		}
-		return favoritosFragment;
-	}
-	
-	private Fragment getInfoFragment() {
-		if (infoFragment == null)
-			infoFragment = new InfoFragment();
-		return infoFragment;
-	}
+    public MyPagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
 
-	@Override
-	public Fragment getItem(int position) {
-		switch (position) {
-		case 0:
-			return getTodosFragment();
-		case 1:
-			return getFavoritosFragment();
-		case 2:
-			return getInfoFragment();
-		default:
-			return null;
-		}
-	}
-	
-//	public void update() {
-//		if (todosFragment != null)
-//			todosFragment.update();
-//		if (favoritosFragment != null)
-//			favoritosFragment.update();
-//	}
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return TITLES[position];
+    }
 
+    @Override
+    public int getCount() {
+        return BuildConfig.MY_PAGER_ADAPTER_COUNT;
+    }
+
+    private Fragment getAllSoundsFragment() {
+        if (mAllSoundsFragment == null) {
+            mAllSoundsFragment = SoundsListFragment.newInstance(SoundsListFragment.SoundsListFragmentType.ALL, null);
+        }
+        return mAllSoundsFragment;
+    }
+
+    private Fragment getFavSoundsFragment() {
+        if (mFavSoundsFragment == null) {
+            mFavSoundsFragment = SoundsListFragment.newInstance(SoundsListFragment.SoundsListFragmentType.FAV, null);
+        }
+        return mFavSoundsFragment;
+    }
+
+    private Fragment getInfoFragment() {
+        if (mInfoFragment == null) {
+            mInfoFragment = new InfoFragment();
+        }
+        return mInfoFragment;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        switch (position) {
+            case 0:
+                return getAllSoundsFragment();
+            case 1:
+                return getFavSoundsFragment();
+            case 2:
+                return getInfoFragment();
+            default:
+                return null;
+        }
+    }
 }

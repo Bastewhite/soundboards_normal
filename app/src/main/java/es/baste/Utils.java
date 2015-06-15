@@ -22,6 +22,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -203,11 +204,11 @@ public class Utils {
     }
 
     public static boolean saveAsRingtone(String s, Context mContext) {
-        File k = new File(PATH + limpiarString(s) + ".mp3");
+        File k = new File(PATH + normalizeString(s) + ".mp3");
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());
-        values.put(MediaStore.MediaColumns.TITLE, limpiarString(s));
+        values.put(MediaStore.MediaColumns.TITLE, normalizeString(s));
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
         values.put(MediaStore.Audio.Media.ARTIST, "cssounds ");
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true);
@@ -226,11 +227,11 @@ public class Utils {
     }
 
     public static boolean saveAsNotification(String s, Context mContext) {
-        File k = new File(PATH + limpiarString(s) + ".mp3");
+        File k = new File(PATH + normalizeString(s) + ".mp3");
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());
-        values.put(MediaStore.MediaColumns.TITLE, limpiarString(s));
+        values.put(MediaStore.MediaColumns.TITLE, normalizeString(s));
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
         values.put(MediaStore.Audio.Media.ARTIST, "cssounds ");
         values.put(MediaStore.Audio.Media.IS_RINGTONE, false);
@@ -249,11 +250,11 @@ public class Utils {
     }
 
     public static boolean saveAsAlarm(String s, Context mContext) {
-        File k = new File(PATH + limpiarString(s) + ".mp3");
+        File k = new File(PATH + normalizeString(s) + ".mp3");
 
         ContentValues values = new ContentValues();
         values.put(MediaStore.MediaColumns.DATA, k.getAbsolutePath());
-        values.put(MediaStore.MediaColumns.TITLE, limpiarString(s));
+        values.put(MediaStore.MediaColumns.TITLE, normalizeString(s));
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3");
         values.put(MediaStore.Audio.Media.ARTIST, "cssounds ");
         values.put(MediaStore.Audio.Media.IS_RINGTONE, false);
@@ -271,17 +272,8 @@ public class Utils {
         return true;
     }
 
-    public static String limpiarString(String input) {
-        // Cadena de caracteres original a sustituir.
-        String original = "áàäéèëíìïóòöúùuñÁÀÄÉÈËÍÌÏÓÒÖÚÙÜÑçÇ¿?¡!º:";
-        // Cadena de caracteres ASCII que reemplazarán los originales.
-        String ascii = "aaaeeeiiiooouuunAAAEEEIIIOOOUUUNcC      ";
-        String output = input;
-        for (int i = 0; i < original.length(); i++) {
-            // Reemplazamos los caracteres especiales.
-            output = output.replace(original.charAt(i), ascii.charAt(i));
-        }// for i
-        return output;
+    public static String normalizeString(String unicodeName) {
+        return Normalizer.normalize(unicodeName.toLowerCase(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
     }
 
     public static boolean save(Sound s, Context mContext) {
@@ -299,7 +291,7 @@ public class Utils {
             return false;
         }
 
-        String filename = limpiarString(s.getNombre()) + ".mp3";
+        String filename = normalizeString(s.getNombre()) + ".mp3";
 
         boolean exists = (new File(PATH)).exists();
         if (!exists) {
@@ -331,7 +323,7 @@ public class Utils {
         Intent it = new Intent(Intent.ACTION_SEND);
         it.putExtra(
                 Intent.EXTRA_STREAM,
-                Uri.parse("file://" + PATH + limpiarString(s.getNombre())
+                Uri.parse("file://" + PATH + normalizeString(s.getNombre())
                         + ".mp3")
         );
         it.setType("audio/mp3");

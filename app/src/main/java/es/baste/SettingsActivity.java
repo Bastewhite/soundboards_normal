@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import es.baste.application.MyApplication;
+import es.baste.fragments.SettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 

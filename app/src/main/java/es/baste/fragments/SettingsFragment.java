@@ -1,4 +1,4 @@
-package es.baste;
+package es.baste.fragments;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,6 +13,10 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
+
+import es.baste.MainActivity;
+import es.baste.R;
+import es.baste.Utils;
 
 public class SettingsFragment extends PreferenceFragment {
     /**
@@ -96,11 +100,9 @@ public class SettingsFragment extends PreferenceFragment {
             nuevos.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     if (prefs.getBoolean("nuevos", true)) {
-                        Toast.makeText(getActivity(), "Sí",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.si, Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "No",
-                                Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.no, Toast.LENGTH_SHORT).show();
                     }
                     isUpdateNeeded = true;
                     return true;
