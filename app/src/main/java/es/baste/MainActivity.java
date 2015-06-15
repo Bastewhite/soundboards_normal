@@ -50,10 +50,6 @@ public class MainActivity extends AppCompatActivity {
         progressDialogLoad(this);
         Utils.salir = false;
 
-        newDesignLoad();
-    }
-
-    private void newDesignLoad() {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
 
@@ -107,8 +103,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_preferences:
-                Intent ii = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivityForResult(ii, 1000);
+                startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), 1000);
                 return true;
             case R.id.menu_share:
                 String s = "He estado usando "
