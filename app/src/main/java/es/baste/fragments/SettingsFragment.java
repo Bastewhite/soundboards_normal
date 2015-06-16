@@ -3,8 +3,6 @@ package es.baste.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +11,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
+import es.baste.BuildConfig;
 import es.baste.R;
 import es.baste.Utils;
 import es.baste.application.SharedPreferencesManager;
@@ -27,7 +26,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         Preference version = findPreference("version");
         if (version != null) {
-            version.setSummary(getVersionName());
+            version.setSummary(BuildConfig.VERSION_NAME);
         }
 
         Preference correo = findPreference("correo");
@@ -35,17 +34,13 @@ public class SettingsFragment extends PreferenceFragment {
             correo.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                    String[] destino = {"bastewhite@gmail.com"};
+                    String[] destino = {getString(R.string.my_email)};
                     sendIntent.putExtra(Intent.EXTRA_EMAIL, destino);
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, getResources()
                             .getString(R.string.app_name));
-                    String versionName = getVersionName();
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "\n\n"
-                            + "API Level: " + Build.VERSION.SDK_INT
-                            + "\nVersión aplicación: " + versionName
-                            + "\nEnviado desde " + android.os.Build.MODEL);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.extra_email_text, Build.VERSION.SDK_INT, BuildConfig.VERSION_NAME, android.os.Build.MODEL));
                     sendIntent.setType("message/rfc822");
-                    startActivity(Intent.createChooser(sendIntent, "Titulo:"));
+                    startActivity(Intent.createChooser(sendIntent, null));
                     return true;
                 }
 
@@ -56,9 +51,7 @@ public class SettingsFragment extends PreferenceFragment {
         if (twitter != null) {
             twitter.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent iii = new Intent("android.intent.action.VIEW", Uri
-                            .parse("http://twitter.com/#!/bastewhite"));
-                    startActivity(iii);
+                    startActivity(new Intent("android.intent.action.VIEW", Uri.parse(getString(R.string.my_twitter_url))));
                     return true;
                 }
 
@@ -69,9 +62,7 @@ public class SettingsFragment extends PreferenceFragment {
         if (otros != null) {
             otros.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                    Intent i = new Intent("android.intent.action.VIEW", Uri
-                            .parse("http://bastewhite.aptoide.com"));
-                    startActivity(i);
+                    startActivity(new Intent("android.intent.action.VIEW", Uri.parse(getString(R.string.my_others_url))));
                     return true;
                 }
 
@@ -81,12 +72,12 @@ public class SettingsFragment extends PreferenceFragment {
         Preference borrartodos = findPreference("borrartodos");
         if (borrartodos != null) {
             borrartodos.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                        public boolean onPreferenceClick(Preference preference) {
-                            borrarTODOS();
-                            return true;
-                        }
+                public boolean onPreferenceClick(Preference preference) {
+                    borrarTODOS();
+                    return true;
+                }
 
-                    });
+            });
         }
 
         Preference nuevos = findPreference("nuevos");
@@ -109,16 +100,17 @@ public class SettingsFragment extends PreferenceFragment {
     public void borrarTODOS() {
         AlertDialog.Builder alt_bld = new AlertDialog.Builder(getActivity());
         alt_bld.setCancelable(false);
-        alt_bld.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                Utils.getListaFavoritos().clear();
-                isUpdateNeeded = true;
-                SharedPreferencesManager.getInstance(getActivity()).removeAllFavs();
-                Toast.makeText(getActivity(), "Lista vacía", Toast.LENGTH_SHORT).show();
-                dialog.cancel();
-            }
-        });
-        alt_bld.setNegativeButton("Nooo",
+        alt_bld.setPositiveButton(R.string.ok,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Utils.getListaFavoritos().clear();
+                        isUpdateNeeded = true;
+                        SharedPreferencesManager.getInstance(getActivity()).removeAllFavs();
+                        Toast.makeText(getActivity(), R.string.empty_list, Toast.LENGTH_SHORT).show();
+                        dialog.cancel();
+                    }
+                });
+        alt_bld.setNegativeButton(R.string.nooo,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
@@ -126,18 +118,9 @@ public class SettingsFragment extends PreferenceFragment {
                 }
         );
         AlertDialog alert = alt_bld.create();
-        alert.setTitle("¿Estás seguro?");
-        alert.setMessage("Se borrara toda la lista de favoritos.");
+        alert.setTitle(R.string.delete_all_fav_title);
+        alert.setMessage(getString(R.string.delete_all_fav));
         alert.show();
-    }
-
-    private String getVersionName() {
-        try {
-            PackageInfo pinfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
-            return pinfo.versionName;
-        } catch (NameNotFoundException e) {
-            return "";
-        }
     }
 
     public boolean isUpdateNeeded() {

@@ -10,19 +10,19 @@ import es.baste.fragments.SoundsListFragment;
 
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
-    private final String[] TITLES = {"TODOS", "FAVORITOS", "INFO"};
-
+    private String[] mTitles;
     private SoundsListFragment mAllSoundsFragment;
     private SoundsListFragment mFavSoundsFragment;
     private InfoFragment mInfoFragment;
 
-    public MyPagerAdapter(FragmentManager fm) {
-        super(fm);
+    public MyPagerAdapter(FragmentManager fragmentManager, String[] titles) {
+        super(fragmentManager);
+        mTitles = titles;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return TITLES[position];
+        return mTitles[position];
     }
 
     @Override

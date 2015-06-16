@@ -5,9 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
@@ -37,8 +34,7 @@ public class Utils {
     private static Sound anterior;
     private static boolean sonido = false;
 
-    public static String nombre = BuildConfig.FOLDER_NAME;
-    private static String PATH = Environment.getExternalStorageDirectory() + File.separator + nombre + File.separator;
+    private static String PATH = Environment.getExternalStorageDirectory() + File.separator + BuildConfig.FOLDER_NAME + File.separator;
 
     public static MediaPlayer getMediaPlayer() {
         return mp;
@@ -61,7 +57,7 @@ public class Utils {
             if (UtilesSonidos.getListaTodos().contains(s))
                 repro = s.getArchivo();
             if (repro == 0) {
-                Toast.makeText(cont, "Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(cont, R.string.error, Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     AssetFileDescriptor afd = cont.getResources()
@@ -69,9 +65,7 @@ public class Utils {
                     mp.setDataSource(afd.getFileDescriptor(),
                             afd.getStartOffset(), afd.getLength());
                     mp.prepare();
-                } catch (IllegalStateException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (IllegalStateException | IOException e) {
                     e.printStackTrace();
                 }
                 mp.start();
@@ -92,6 +86,7 @@ public class Utils {
             fIn.read(buffer);
             fIn.close();
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         String filename = ".nomedia";
@@ -102,8 +97,8 @@ public class Utils {
             save.write(buffer);
             save.flush();
             save.close();
-        } catch (FileNotFoundException e) {
         } catch (IOException e) {
+            e.printStackTrace();
         }
 
         mContext.sendBroadcast(new Intent(
@@ -118,14 +113,13 @@ public class Utils {
     public static boolean onBackPressed(Context mContext) {
         if (!salir) {
             salir = true;
-            Toast.makeText(mContext, "Pulse otra ver para salir",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, R.string.press_again_to_exit, Toast.LENGTH_SHORT).show();
             return false;
         } else {
             SharedPreferencesManager preferencesManager = SharedPreferencesManager.getInstance(mContext);
-            if (preferencesManager.getVersionCode() < getVersion(mContext)) {
+            if (preferencesManager.getVersionCode() < BuildConfig.VERSION_CODE) {
                 preferencesManager.setShowNews(false);
-                preferencesManager.setVersionCode(getVersion(mContext));
+                preferencesManager.setVersionCode(BuildConfig.VERSION_CODE);
             }
             if (mp.isPlaying())
                 mp.stop();
@@ -133,25 +127,12 @@ public class Utils {
         }
     }
 
-    public static int getVersion(Context mContext) {
-        int version = -1;
-        try {
-            PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(
-                    mContext.getPackageName(), PackageManager.GET_META_DATA);
-            version = pInfo.versionCode;
-        } catch (NameNotFoundException e1) {
-            // Log.e(this.getClass().getSimpleName(), "Name not found", e1);
-        }
-        return version;
-    }
-
     /**
      * @param aux
      * @param mContext
      */
     public static void subMenu(final Sound aux, final Context mContext) {
-        final CharSequence[] items = {"Asignar como...", "Compartir...",
-                "Copiar a SD"};
+        final CharSequence[] items = mContext.getResources().getStringArray(R.array.sub_menu);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -160,11 +141,9 @@ public class Utils {
                     asignarComo(aux, mContext);
                 } else if (item == 1 && compartir(aux, mContext)) {
                 } else if (item == 2 && save(aux, mContext)) {
-                    Toast.makeText(mContext, "Copiado en: '" + nombre + "'",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.copy_on, BuildConfig.FOLDER_NAME), Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, "Upsss, algo ha ido mal :(",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.error_2, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -174,26 +153,22 @@ public class Utils {
     }
 
     public static void asignarComo(final Sound aux, final Context mContext) {
-        final CharSequence[] items = {"Tono", "Notificación", "Alarma"};
+        final CharSequence[] items = mContext.getResources().getStringArray(R.array.asignar_como);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int item) {
                 if (item == 0 && save(aux, mContext)
                         && saveAsRingtone(aux.getNombre(), mContext)) {
-                    Toast.makeText(mContext, "Asignado como tono",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.asignado_como_tono, Toast.LENGTH_SHORT).show();
                 } else if (item == 1 && save(aux, mContext)
                         && saveAsNotification(aux.getNombre(), mContext)) {
-                    Toast.makeText(mContext, "Asignado como notificación",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.asignado_como_notificacion, Toast.LENGTH_SHORT).show();
                 } else if (item == 2 && save(aux, mContext)
                         && saveAsAlarm(aux.getNombre(), mContext)) {
-                    Toast.makeText(mContext, "Asignado como alarma",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.asignado_como_alarma, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(mContext, "Upsss, algo ha ido mal :(",
-                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, R.string.error_2, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -326,7 +301,7 @@ public class Utils {
                         + ".mp3")
         );
         it.setType("audio/mp3");
-        mContext.startActivity(Intent.createChooser(it, "Compartir " + s));
+        mContext.startActivity(Intent.createChooser(it, mContext.getString(R.string.compartir_algo, s.getNombre())));
         return true;
     }
 

@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import es.baste.BuildConfig;
 import es.baste.R;
 import es.baste.UtilesSonidos;
-import es.baste.Utils;
 
 public class InfoFragment extends Fragment {
 
@@ -24,6 +24,6 @@ public class InfoFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView textview = (TextView) view.findViewById(R.id.helpWelcome);
-        textview.setText(getString(R.string.info_text, getString(R.string.app_name), UtilesSonidos.getListaTodos().size(), Utils.nombre, Utils.nombre));
+        textview.setText(getString(R.string.info_text, getString(R.string.app_name), UtilesSonidos.getListaTodos().size(), BuildConfig.FOLDER_NAME, BuildConfig.FOLDER_NAME));
     }
 }

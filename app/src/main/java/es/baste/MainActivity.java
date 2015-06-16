@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(mToolbar);
 
-        mAppSectionsPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        mAppSectionsPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), getResources().getStringArray(R.array.titles));
         mViewpager.setAdapter(mAppSectionsPagerAdapter);
         mTabs.setupWithViewPager(mViewpager);
 
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 UtilesSonidos.sonidos();
                 iniciarListaFav();
-                if (mPrefsManager.getVersionCode() < Utils.getVersion(MainActivity.this)) {
+                if (mPrefsManager.getVersionCode() < BuildConfig.VERSION_CODE) {
                     mPrefsManager.removeShowNews();
                 }
                 progressDialog.dismiss();

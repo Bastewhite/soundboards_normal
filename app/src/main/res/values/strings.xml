@@ -20,4 +20,39 @@
     <string name="compartir_aplicacion">Compartir aplicación</string>
     <string name="compartir_aplicacion_text">He estado usando %1$s y creo que te gustará. Pruébalo en tu Android: http://market.android.com/details?id=%2$s</string>
     <string name="cargando">Cargando</string>
+    <string name="error">Error</string>
+    <string name="press_again_to_exit">Pulse otra ver para salir</string>
+    <string name="error_2">Upsss, algo ha ido mal :(</string>
+    <string name="copy_on">Copiado en \'%s\'</string>
+    <string name="asignado_como_tono">Asignado como tono</string>
+    <string name="asignado_como_notificacion">Asignado como notificación</string>
+    <string name="asignado_como_alarma">Asignado como alarma</string>
+    <string name="compartir_algo">Compartir \'%s\'</string>
+    <string name="nooo">Nooo</string>
+    <string name="ok">OK</string>
+    <string name="empty_list">Lista vacía</string>
+    <string name="delete_all_fav_title">¿Estás seguro?</string>
+    <string name="delete_all_fav">Se borrara toda la lista de favoritos.</string>
+    <string name="my_email">bastewhite@gmail.com</string>
+    <string name="extra_email_text">\n\nAPI Level: %1$s\nVersión aplicación: %2$s\nEnviado desde %3$s</string>
+    <string name="my_twitter_url">http://twitter.com/#!/bastewhite</string>
+    <string name="my_others_url">http://bastewhite.aptoide.com</string>
+
+    <string-array name="titles">
+        <item>TODOS</item>
+        <item>FAVORITOS</item>
+        <item>INFO</item>
+    </string-array>
+    
+    <string-array name="sub_menu">
+        <item>Asignar como...</item>
+        <item>Compartir...</item>
+        <item>Copiar a SD</item>
+    </string-array>
+
+    <string-array name="asignar_como">
+        <item>Tono</item>
+        <item>Notificación</item>
+        <item>Alarma</item>
+    </string-array>
 </resources>
