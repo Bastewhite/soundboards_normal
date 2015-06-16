@@ -25,7 +25,7 @@ public class SearchableActivity extends AppCompatActivity {
         String query = getIntent().getStringExtra(SearchManager.QUERY);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setSubtitle("Resultados de la búsqueda: " + query);
+        getSupportActionBar().setSubtitle(getString(R.string.resultados_busqueda, query));
 
         // Get the intent, verify the action and get the query
         if (Intent.ACTION_SEARCH.equals(getIntent().getAction())) {

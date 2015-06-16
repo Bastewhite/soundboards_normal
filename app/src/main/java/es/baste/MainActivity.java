@@ -3,18 +3,12 @@ package es.baste;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,12 +20,13 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import es.baste.adapters.MyPagerAdapter;
 import es.baste.application.MyApplication;
+import es.baste.application.SharedPreferencesManager;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.ChangeBackgroundEvent;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static SharedPreferences prefs;
+    private SharedPreferencesManager mPrefsManager;
     private ProgressDialog progressDialog;
     private MyPagerAdapter mAppSectionsPagerAdapter;
 
@@ -46,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mPrefsManager = SharedPreferencesManager.getInstance(this);
         progressDialogLoad(this);
         Utils.salir = false;
 
@@ -61,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         mViewpager.setBackgroundResource(BuildConfig.DEFAULT_FONDO);
 
-        String fav = prefs.getString("fav", "");
-        if (fav.equals(""))
+        if (mPrefsManager.haveFavSounds())
             mViewpager.setCurrentItem(0);
         else
             mViewpager.setCurrentItem(1);
@@ -77,16 +71,14 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 UtilesSonidos.sonidos();
                 iniciarListaFav();
-                if (prefs.getInt("VersionCode", 0) < getVersion()) {
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.remove("nuevos");
-                    editor.commit();
+                if (mPrefsManager.getVersionCode() < Utils.getVersion(MainActivity.this)) {
+                    mPrefsManager.removeShowNews();
                 }
                 progressDialog.dismiss();
             }
         };
         progressDialog = new ProgressDialog(mContext);
-        progressDialog.setMessage("Cargando");
+        progressDialog.setMessage(getString(R.string.cargando));
         progressDialog.setCancelable(false);
         progressDialog.show();
         Thread t = new Thread(showWaitDialog);
@@ -106,15 +98,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(new Intent(MainActivity.this, SettingsActivity.class), 1000);
                 return true;
             case R.id.menu_share:
-                String s = "He estado usando "
-                        + getResources().getString(R.string.app_name)
-                        + " y creo que te gustará. Pruébalo en tu Android: "
-                        + "http://market.android.com/details?id="
-                        + getPackageName();
                 Intent it = new Intent(Intent.ACTION_SEND);
-                it.putExtra(Intent.EXTRA_TEXT, s);
+                it.putExtra(Intent.EXTRA_TEXT, getString(R.string.compartir_aplicacion_text, getString(R.string.app_name), getPackageName()));
                 it.setType("text/plain");
-                startActivity(Intent.createChooser(it, "Compartir aplicación"));
+                startActivity(Intent.createChooser(it, getString(R.string.compartir_aplicacion)));
                 return true;
             case R.id.menu_search:
                 onSearchRequested();
@@ -128,22 +115,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private int getVersion() {
-        int version = -1;
-        try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(
-                    getPackageName(), PackageManager.GET_META_DATA);
-            version = pInfo.versionCode;
-        } catch (NameNotFoundException e1) {
-            Log.e(this.getClass().getSimpleName(), "Name not found", e1);
-        }
-        return version;
-    }
-
     private void iniciarListaFav() {
         if(Utils.getListaFavoritos().isEmpty()){
-            String fav = prefs.getString("fav", "");
-            String data[] = fav.split("-");
+            String data[] = mPrefsManager.getFavStrings();
             for (String ss : data) {
                 for(Sound so:UtilesSonidos.getListaTodos())
                     if(so.getNombre().equals(ss))
@@ -186,14 +160,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
         BusProvider.getInstance().register(this);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-
         BusProvider.getInstance().unregister(this);
     }
 

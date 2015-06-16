@@ -2,7 +2,6 @@ package es.baste.views;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
@@ -20,10 +19,10 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import es.baste.MainActivity;
 import es.baste.R;
 import es.baste.Sound;
 import es.baste.Utils;
+import es.baste.application.SharedPreferencesManager;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.UpdateEvent;
 
@@ -43,11 +42,6 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
 
     private Sound mSound;
 
-    public interface Listener {
-        void onSoundClick(Sound sound);
-        void onSoundLongClick(Sound sound);
-    }
-
     public SoundItemController(View itemView) {
         super(itemView);
 
@@ -55,17 +49,6 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
     }
-
-/*    public static SonidoItemController get(View view) {
-        SonidoItemController controller = (SonidoItemController) view.getTag();
-        if (controller == null) {
-            controller = new SonidoItemController();
-            ButterKnife.inject(controller, view);
-            view.setTag(controller);
-        }
-
-        return controller;
-    }*/
 
     public SoundItemController configure(Sound sound) {
         this.mSound = sound;
@@ -77,8 +60,7 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
         btnRemove.setChecked(Utils.getListaFavoritos().contains(sound));
 
         //Icono nuevo
-        boolean vnuevos = MainActivity.prefs.getBoolean("nuevos", true);
-        if (sound.isNuevo() && vnuevos)
+        if (sound.isNuevo() && SharedPreferencesManager.getInstance(mTodtvMail.getContext()).isShowNews())
             nuevo.setVisibility(View.VISIBLE);
         else
             nuevo.setVisibility(View.GONE);
@@ -141,28 +123,15 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
     }
 
     private void anadirFavorito(Context context, Sound aux) {
-        SharedPreferences prefs = MainActivity.prefs;
         Utils.getListaFavoritos().add(aux);
-        String fav = prefs.getString("fav", "");
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("fav", fav + "-" + aux.getNombre());
-        editor.commit();
-        Toast.makeText(context, R.string.anadido,
-                Toast.LENGTH_SHORT).show();
+        SharedPreferencesManager.getInstance(context).addFav(aux.getNombre());
+        Toast.makeText(context, R.string.anadido, Toast.LENGTH_SHORT).show();
     }
 
 
     private void eliminarFavorito(Context context, Sound aux) {
-        SharedPreferences prefs = MainActivity.prefs;
         Utils.getListaFavoritos().remove(aux);
-        String s = "";
-        for (Sound sss : Utils.getListaFavoritos()) {
-            s = s + "-" + sss.getNombre();
-        }
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove("fav");
-        editor.putString("fav", s);
-        editor.commit();
+        SharedPreferencesManager.getInstance(context).reloadFavs();
         Toast.makeText(context, R.string.eliminado, Toast.LENGTH_SHORT).show();
     }
 

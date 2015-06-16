@@ -16,4 +16,8 @@
     <string name="eliminado">Eliminado de favoritos</string>
     <string name="action_settings">Ajustes</string>
     <string name="lista_fav_vacia">No has añadido ninguna frase a tu lista de favoritos :(</string>
+    <string name="resultados_busqueda">Resultados de la búsqueda: %s</string>
+    <string name="compartir_aplicacion">Compartir aplicación</string>
+    <string name="compartir_aplicacion_text">He estado usando %1$s y creo que te gustará. Pruébalo en tu Android: http://market.android.com/details?id=%2$s</string>
+    <string name="cargando">Cargando</string>
 </resources>

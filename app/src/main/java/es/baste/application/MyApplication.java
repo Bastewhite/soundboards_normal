@@ -10,7 +10,7 @@ import es.baste.R;
 
 public class MyApplication extends Application{
 
-    Tracker mTracker;
+    private Tracker mTracker;
 
     private synchronized Tracker getTracker() {
         if (mTracker == null) {

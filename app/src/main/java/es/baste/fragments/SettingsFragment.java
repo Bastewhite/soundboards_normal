@@ -3,7 +3,6 @@ package es.baste.fragments;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
@@ -14,22 +13,17 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
-import es.baste.MainActivity;
 import es.baste.R;
 import es.baste.Utils;
+import es.baste.application.SharedPreferencesManager;
 
 public class SettingsFragment extends PreferenceFragment {
-    /**
-     * Called when the activity is first created.
-     */
-    private SharedPreferences prefs;
 
     private boolean isUpdateNeeded = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        prefs = MainActivity.prefs;
 
         Preference version = findPreference("version");
         if (version != null) {
@@ -99,7 +93,7 @@ public class SettingsFragment extends PreferenceFragment {
         if (nuevos != null) {
             nuevos.setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 public boolean onPreferenceClick(Preference preference) {
-                    if (prefs.getBoolean("nuevos", true)) {
+                    if (SharedPreferencesManager.getInstance(getActivity()).isShowNews()) {
                         Toast.makeText(getActivity(), R.string.si, Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getActivity(), R.string.no, Toast.LENGTH_SHORT).show();
@@ -119,11 +113,8 @@ public class SettingsFragment extends PreferenceFragment {
             public void onClick(DialogInterface dialog, int id) {
                 Utils.getListaFavoritos().clear();
                 isUpdateNeeded = true;
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.remove("fav");
-                editor.commit();
-                Toast.makeText(getActivity(), "Lista vacía",
-                        Toast.LENGTH_SHORT).show();
+                SharedPreferencesManager.getInstance(getActivity()).removeAllFavs();
+                Toast.makeText(getActivity(), "Lista vacía", Toast.LENGTH_SHORT).show();
                 dialog.cancel();
             }
         });

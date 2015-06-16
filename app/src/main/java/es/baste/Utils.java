@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -26,6 +25,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.baste.application.SharedPreferencesManager;
 import es.baste.otto.BusProvider;
 import es.baste.otto.events.ChangeBackgroundEvent;
 
@@ -122,11 +122,10 @@ public class Utils {
                     Toast.LENGTH_SHORT).show();
             return false;
         } else {
-            if (MainActivity.prefs.getInt("VersionCode", 0) < getVersion(mContext)) {
-                SharedPreferences.Editor editor = MainActivity.prefs.edit();
-                editor.putBoolean("nuevos", false);
-                editor.putInt("VersionCode", getVersion(mContext));
-                editor.commit();
+            SharedPreferencesManager preferencesManager = SharedPreferencesManager.getInstance(mContext);
+            if (preferencesManager.getVersionCode() < getVersion(mContext)) {
+                preferencesManager.setShowNews(false);
+                preferencesManager.setVersionCode(getVersion(mContext));
             }
             if (mp.isPlaying())
                 mp.stop();
@@ -134,7 +133,7 @@ public class Utils {
         }
     }
 
-    private static int getVersion(Context mContext) {
+    public static int getVersion(Context mContext) {
         int version = -1;
         try {
             PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(

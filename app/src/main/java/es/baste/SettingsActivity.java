@@ -20,7 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setSubtitle(R.string.action_settings);
         }
         else {
-            setTitle(getString(R.string.app_name) + ": " + getString(R.string.action_settings));
+            setTitle(String.format("%1$s: %2$s", getString(R.string.app_name), getString(R.string.action_settings)));
         }
 
         mSettingsFragment = new SettingsFragment();
