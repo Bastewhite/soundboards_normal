@@ -26,6 +26,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<SoundItemControl
     private List<Sound> mSounds;
 
     public MyRecyclerViewAdapter(Context context, List<Sound> sounds) {
+        setHasStableIds(true);
         TypedValue typedValue = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
         mBackground = typedValue.resourceId;
@@ -48,5 +49,10 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<SoundItemControl
     @Override
     public int getItemCount() {
         return mSounds.size();
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return mSounds.get(position).hashCode();
     }
 }

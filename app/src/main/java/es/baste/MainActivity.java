@@ -16,8 +16,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.squareup.otto.Subscribe;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import es.baste.adapters.MyPagerAdapter;
 import es.baste.application.MyApplication;
 import es.baste.application.SharedPreferencesManager;
@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private MyPagerAdapter mAppSectionsPagerAdapter;
 
-    @InjectView(R.id.toolbar)
-    Toolbar mToolbar;
-    @InjectView(R.id.tabs)
-    TabLayout mTabs;
-    @InjectView(R.id.viewpager)
-    ViewPager mViewpager;
+    @Bind(R.id.toolbar)
+    protected Toolbar mToolbar;
+    @Bind(R.id.tabs)
+    protected TabLayout mTabs;
+    @Bind(R.id.viewpager)
+    protected ViewPager mViewpager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         Utils.salir = false;
 
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
 
@@ -92,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_preferences:

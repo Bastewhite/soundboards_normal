@@ -18,8 +18,8 @@ import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import es.baste.DividerItemDecoration;
 import es.baste.R;
 import es.baste.Sound;
@@ -34,10 +34,10 @@ public class SoundsListFragment extends Fragment {
     private static final String KEY_BUNDLE_TYPE = "keyBundleType";
     private static final String KEY_BUNDLE_QUERY = "keyBundleQuery";
 
-    @InjectView(R.id.tvEmpty)
-    TextView mTvEmpty;
-    @InjectView(R.id.recyclerview)
-    RecyclerView mRecyclerView;
+    @Bind(R.id.tvEmpty)
+    protected TextView mTvEmpty;
+    @Bind(R.id.recyclerview)
+    protected RecyclerView mRecyclerView;
 
     private MyRecyclerViewAdapter mAdapter;
     private SoundsListFragmentType mType;
@@ -89,7 +89,7 @@ public class SoundsListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         setupRecyclerView();
         return view;
     }

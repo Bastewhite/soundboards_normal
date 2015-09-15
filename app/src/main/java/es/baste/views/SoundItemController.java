@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import es.baste.R;
 import es.baste.Sound;
@@ -31,21 +31,21 @@ import es.baste.otto.events.UpdateEvent;
  */
 public class SoundItemController extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
-    @InjectView(R.id.icon_new)
-    ImageView nuevo;
-    @InjectView(R.id.TodtvMail)
-    TextView mTodtvMail;
-    @InjectView(R.id.TodbtnRemove)
-    CheckBox btnRemove;
-    @InjectView(R.id.video)
-    Button mVideo;
+    @Bind(R.id.icon_new)
+    protected ImageView nuevo;
+    @Bind(R.id.TodtvMail)
+    protected TextView mTodtvMail;
+    @Bind(R.id.TodbtnRemove)
+    protected CheckBox btnRemove;
+    @Bind(R.id.video)
+    protected Button mVideo;
 
     private Sound mSound;
 
     public SoundItemController(View itemView) {
         super(itemView);
 
-        ButterKnife.inject(this, itemView);
+        ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
     }
@@ -83,7 +83,7 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
     }
 
     @OnClick(R.id.TodbtnRemove)
-    public void onFavoritesClick(View view) {
+    protected void onFavoritesClick(View view) {
         if (btnRemove.isChecked()) {
             anadirFavorito(view.getContext(), mSound);
         } else {
@@ -93,7 +93,7 @@ public class SoundItemController extends RecyclerView.ViewHolder implements View
     }
 
     @OnClick(R.id.video)
-    public void onVideoClick(View view) {
+    protected void onVideoClick(View view) {
         if (Utils.getMediaPlayer().isPlaying())
             Utils.getMediaPlayer().stop();
 
